@@ -1,0 +1,39 @@
+-- Local-only configuration template
+-- Use this template for machines that only use local terminal sessions
+-- Copy this file to ~/.wezterm.lua.local and customize for your local machine
+
+return function(config, wezterm, act)
+	-- Local-only Configuration
+	-- This machine doesn't use multiplexing or remote connections
+
+	-- Machine-specific display settings
+	-- config.font_size = 14            -- Adjust for this monitor
+	-- config.window_background_opacity = 0.9
+
+	-- Machine-specific working directories
+	-- config.default_cwd = "/Users/username/projects"
+
+	-- Machine-specific environment variables
+	-- config.set_environment_variables = {
+	--     EDITOR = "nvim",
+	--     BROWSER = "firefox",
+	-- }
+
+	-- Local-specific keybindings (if needed)
+	config.keys = config.keys or {}
+
+	-- Example: Machine-specific launcher for local projects
+	-- table.insert(config.keys, {
+	-- 	key = "p",
+	-- 	mods = "LEADER",
+	-- 	action = wezterm.action_callback(function(window, pane)
+	-- 		local projects = {
+	-- 			{ id = "/Users/username/work", label = "Work Projects" },
+	-- 			{ id = "/Users/username/personal", label = "Personal" },
+	-- 		}
+	-- 		-- Implement project launcher here
+	-- 	end),
+	-- })
+
+	return config
+end

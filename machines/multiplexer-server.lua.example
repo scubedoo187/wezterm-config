@@ -1,0 +1,58 @@
+-- Multiplexer Server configuration template
+-- Use this template for machines that will host WezTerm multiplexer sessions
+-- Copy this file to ~/.wezterm.lua.local and customize for your server machine
+
+return function(config, wezterm, act)
+	-- Multiplexer Server Configuration
+	-- This machine acts as the multiplexer server that can be accessed remotely
+
+	-- Unix domain for local multiplexer
+	config.unix_domains = config.unix_domains or {}
+	table.insert(config.unix_domains, {
+		name = "local-multiplexer",
+		socket_path = "/tmp/wezterm-local-multiplexer.sock",
+		skip_permissions_check = true,
+	})
+
+	-- SSH domains configuration for remote access
+	config.ssh_domains = config.ssh_domains or {}
+	table.insert(config.ssh_domains, {
+		name = "server-remote",
+		remote_address = "YOUR_SERVER_IP_HERE", -- Replace with this machine's IP
+		username = "YOUR_USERNAME_HERE",        -- Replace with your username
+		multiplexing = "WezTerm",
+	})
+
+	-- Machine-specific keybindings
+	config.keys = config.keys or {}
+
+	-- Add keybinding to attach to local multiplexer domain
+	table.insert(config.keys, {
+		key = "d",
+		mods = "LEADER",
+		action = act.AttachDomain("local-multiplexer"),
+	})
+
+	-- Add keybinding to detach from current domain
+	table.insert(config.keys, {
+		key = "D",
+		mods = "LEADER|SHIFT",
+		action = act.DetachDomain("CurrentPaneDomain"),
+	})
+
+	-- Add keybinding to show launcher with domains
+	table.insert(config.keys, {
+		key = "m",
+		mods = "LEADER",
+		action = act.ShowLauncherArgs({
+			flags = "FUZZY|DOMAINS",
+			title = "Select Domain",
+		}),
+	})
+
+	-- Server-specific display settings (adjust for this machine's monitor)
+	-- config.font_size = 14  -- Different size for this monitor
+	-- config.window_background_opacity = 0.9
+
+	return config
+end

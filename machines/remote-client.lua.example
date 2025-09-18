@@ -1,0 +1,52 @@
+-- Remote Client configuration template
+-- Use this template for machines that will connect to remote WezTerm multiplexers
+-- Copy this file to ~/.wezterm.lua.local and customize for your client machine
+
+return function(config, wezterm, act)
+	-- Remote Client Configuration
+	-- This machine connects TO remote multiplexer servers
+
+	-- SSH domains configuration for connecting to remote servers
+	config.ssh_domains = config.ssh_domains or {}
+	table.insert(config.ssh_domains, {
+		name = "remote-server",
+		remote_address = "YOUR_SERVER_ADDRESS", -- SSH host alias or IP address
+		username = "YOUR_USERNAME_HERE",
+		multiplexing = "WezTerm",
+		-- Optional: automatically connect on startup
+		-- assume_shell = "Posix",
+	})
+
+	-- Machine-specific keybindings for client
+	config.keys = config.keys or {}
+
+	-- Quick connect to remote multiplexer
+	table.insert(config.keys, {
+		key = "r",
+		mods = "LEADER",
+		action = act.AttachDomain("remote-server"),
+	})
+
+	-- Show launcher with domains (including remote ones)
+	table.insert(config.keys, {
+		key = "m",
+		mods = "LEADER",
+		action = act.ShowLauncherArgs({
+			flags = "FUZZY|DOMAINS",
+			title = "Connect to Domain",
+		}),
+	})
+
+	-- Client-specific display settings (adjust for this machine's monitor)
+	-- config.font_size = 16  -- Larger for this monitor
+	-- config.window_background_opacity = 0.85
+
+	-- Optional: Auto-connect to remote server on startup (uncomment if desired)
+	-- wezterm.on("gui-startup", function()
+	-- 	local tab, pane, window = wezterm.mux.spawn_window({
+	-- 		domain = { DomainName = "remote-server" },
+	-- 	})
+	-- end)
+
+	return config
+end
