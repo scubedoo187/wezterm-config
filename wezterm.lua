@@ -4,11 +4,12 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
--- Get the directory where this config file is located
-local script_dir = debug.getinfo(1, "S").source:sub(2):match("(.*/)") or ""
+-- Get the home directory and construct the config path
+local home = os.getenv("HOME")
+local config_dir = home .. "/wezterm-config"
 
 -- Add modules directory to Lua path
-package.path = package.path .. ";" .. script_dir .. "modules/?.lua"
+package.path = package.path .. ";" .. config_dir .. "/modules/?.lua"
 
 -- Function to safely load modules
 local function safe_require(module_name)
@@ -25,7 +26,7 @@ end
 local modules = {
 	"appearance",
 	"keybindings",
-	"session-manager"
+	"session-manager",
 }
 
 for _, module_name in ipairs(modules) do
@@ -57,3 +58,4 @@ end
 config = load_local_config(config)
 
 return config
+

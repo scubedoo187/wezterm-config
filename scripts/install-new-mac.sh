@@ -79,25 +79,27 @@ main() {
 
     # Step 4: Install required fonts
     log_info "🔤 Installing JetBrains Mono Nerd Font..."
-    brew tap homebrew/cask-fonts
-    brew install --cask font-jetbrains-mono-nerd-font || log_warning "Font may already be installed"
+
+    if ! brew list --cask font-jetbrains-mono-nerd-font &>/dev/null; then
+        log_info "Installing JetBrains Mono Nerd Font..."
+        if brew install --cask font-jetbrains-mono-nerd-font; then
+            log_success "JetBrains Mono Nerd Font installed"
+        else
+            log_error "Failed to install JetBrains Mono Nerd Font"
+            log_info "You can install it manually later with: brew install --cask font-jetbrains-mono-nerd-font"
+        fi
+    else
+        log_success "JetBrains Mono Nerd Font already installed"
+    fi
 
     # Step 5: Clone the configuration repository
     log_info "📦 Cloning WezTerm configuration repository..."
-    if [ -d "$CONFIG_DIR" ]; then
-        log_warning "Configuration directory already exists at $CONFIG_DIR"
-        read -p "Do you want to remove it and re-clone? [y/N]: " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            rm -rf "$CONFIG_DIR"
-        else
-            log_info "Skipping repository clone"
-        fi
-    fi
-
     if [ ! -d "$CONFIG_DIR" ]; then
         git clone "$REPO_URL" "$CONFIG_DIR"
         log_success "Repository cloned to $CONFIG_DIR"
+    else
+        log_success "Configuration directory already exists at $CONFIG_DIR"
+        log_info "Skipping repository clone"
     fi
 
     # Step 6: Install session manager dependency
