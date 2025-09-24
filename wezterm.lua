@@ -4,7 +4,7 @@ local wezterm = require("wezterm")
 
 local config = wezterm.config_builder()
 
--- Get the home directory and construct the config path
+-- Get the directory where this config file is located
 local home = os.getenv("HOME")
 local config_dir = home .. "/wezterm-config"
 
@@ -58,4 +58,3 @@ end
 config = load_local_config(config)
 
 return config
-
