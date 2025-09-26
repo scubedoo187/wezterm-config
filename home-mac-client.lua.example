@@ -1,0 +1,69 @@
+-- Home Mac Client Configuration for connecting to Office Mac Mux Server
+-- Copy this file to ~/.wezterm.lua.local on your home Mac
+-- This configuration connects to the office Mac's multiplexer server
+
+return function(config, wezterm, act)
+	-- Remote Client Configuration
+	-- This machine connects TO the office Mac multiplexer server
+
+	-- SSH domains configuration for connecting to office Mac server
+	config.ssh_domains = config.ssh_domains or {}
+	table.insert(config.ssh_domains, {
+		name = "office-server",
+		remote_address = "100.105.139.51", -- Office Mac IP address
+		username = "yg_jung",
+		multiplexing = "WezTerm",
+		-- Optional: specify SSH key if needed
+		-- ssh_option = {
+		-- 	IdentityFile = "~/.ssh/id_rsa",
+		-- },
+		-- Optional: automatically connect on startup (uncomment if desired)
+		-- assume_shell = "Posix",
+	})
+
+	-- Client-specific keybindings
+	config.keys = config.keys or {}
+
+	-- Quick connect to office multiplexer server
+	table.insert(config.keys, {
+		key = "o", -- 'o' for office
+		mods = "LEADER",
+		action = act.AttachDomain("office-server"),
+	})
+
+	-- Show launcher with domains (including remote ones)
+	table.insert(config.keys, {
+		key = "m",
+		mods = "LEADER",
+		action = act.ShowLauncherArgs({
+			flags = "FUZZY|DOMAINS",
+			title = "Connect to Domain",
+		}),
+	})
+
+	-- Detach from current domain (useful when disconnecting)
+	table.insert(config.keys, {
+		key = "D",
+		mods = "LEADER|SHIFT",
+		action = act.DetachDomain("CurrentPaneDomain"),
+	})
+
+	-- Home Mac-specific display settings
+	-- Adjust these for your home Mac's monitor setup:
+	-- config.font_size = 16  -- Larger font for home monitor
+	-- config.window_background_opacity = 0.85
+
+	-- Client-specific settings for remote connection
+	config.ssh_backend = "Ssh2"  -- Use libssh2 backend for better compatibility
+
+	-- Optional: Auto-connect to office server on startup (uncomment if desired)
+	-- Warning: This will attempt to connect every time WezTerm starts
+	-- wezterm.on("gui-startup", function()
+	-- 	local tab, pane, window = wezterm.mux.spawn_window({
+	-- 		domain = { DomainName = "office-server" },
+	-- 	})
+	-- 	window:set_title("Connected to Office")
+	-- end)
+
+	return config
+end
