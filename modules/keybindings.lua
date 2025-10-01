@@ -35,6 +35,28 @@ function module.apply_to_config(config)
 			action = act.ActivatePaneDirection("Down"),
 		},
 
+		-- Pane resizing with CTRL+CMD+HJKL
+		{
+			key = "h",
+			mods = "CTRL|CMD",
+			action = act.AdjustPaneSize({ "Left", 5 }),
+		},
+		{
+			key = "l",
+			mods = "CTRL|CMD",
+			action = act.AdjustPaneSize({ "Right", 5 }),
+		},
+		{
+			key = "j",
+			mods = "CTRL|CMD",
+			action = act.AdjustPaneSize({ "Down", 5 }),
+		},
+		{
+			key = "k",
+			mods = "CTRL|CMD",
+			action = act.AdjustPaneSize({ "Up", 5 }),
+		},
+
 		-- Pane splitting
 		{
 			key = "\\",

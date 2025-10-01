@@ -5,7 +5,7 @@ local module = {}
 
 function module.apply_to_config(config)
 	-- Color scheme and visual appearance
-	config.color_scheme = "Ayu Dark (Gogh)"
+	config.color_scheme = "Seoul256 (Gogh)"
 
 	config.colors = {
 		selection_fg = "none",
@@ -23,6 +23,15 @@ function module.apply_to_config(config)
 	-- IME and cursor
 	config.use_ime = false
 	config.default_cursor_style = "SteadyBlock"
+
+	-- Inactive pane dimming
+	-- Adjust these values to control how much inactive panes are dimmed:
+	-- saturation: 0.5-1.0 (lower = less colorful)
+	-- brightness: 0.5-1.0 (lower = darker)
+	config.inactive_pane_hsb = {
+		saturation = 0.7,
+		brightness = 0.4,
+	}
 
 	-- Status line
 	wezterm.on("update-right-status", function(window, pane)
