@@ -21,8 +21,8 @@ function module.apply_to_config(config)
 	config.window_decorations = "RESIZE"
 
 	-- IME and cursor
-	config.use_ime = false
-	config.default_cursor_style = "SteadyBlock"
+	config.use_ime = true
+	config.default_cursor_style = "BlinkingBlock"
 
 	-- Inactive pane dimming
 	-- Adjust these values to control how much inactive panes are dimmed:
