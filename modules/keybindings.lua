@@ -146,6 +146,39 @@ function module.apply_to_config(config)
 				end),
 			}),
 		},
+
+		-- Workspace renaming
+		{
+			key = ".",
+			mods = "LEADER",
+			action = act.PromptInputLine({
+				description = "Enter new name for workspace",
+				action = wezterm.action_callback(function(window, pane, line)
+					if line then
+						local current_workspace = window:active_workspace()
+						local home = wezterm.home_dir
+						local socket_path = home .. "/.local/share/wezterm/sock"
+						
+						-- Use full path that works on both Intel and Apple Silicon Macs
+						-- Falls back to 'wezterm' in PATH if neither common location exists
+						local cmd = string.format(
+							'export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"; WEZTERM_UNIX_SOCKET="%s" wezterm cli rename-workspace --workspace "%s" "%s" 2>&1',
+							socket_path,
+							current_workspace,
+							line
+						)
+						local handle = io.popen(cmd)
+						if handle then
+							local result = handle:read("*a")
+							handle:close()
+							if result and result ~= "" then
+								wezterm.log_info("Rename result: " .. tostring(result))
+							end
+						end
+					end
+				end),
+			}),
+		},
 	}
 end
 
